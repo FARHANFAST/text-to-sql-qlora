@@ -1,0 +1,26 @@
+# private working notes / tool settings
+CLAUDE.md
+PROGRESS.md
+.claude/
+
+# python
+venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# data (raw Spider download + generated training files)
+data/raw/
+data/processed/
+
+# large model / adapter artifacts
+*.gguf
+*.safetensors
+adapters/
+
+# env / secrets
+.env
+
+# os
+.DS_Store
+Thumbs.db
