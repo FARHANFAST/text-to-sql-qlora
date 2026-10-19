@@ -121,7 +121,7 @@ def build_messages(version: str, example: dict, split: str) -> list[dict]:
 
     if version == "v3":
         for shot in FEW_SHOT_EXAMPLES:
-            shot_schema = schema_v1(shot["db_id"], shot["split"])
+            shot_schema = schema_v2(shot["db_id"], shot["split"])
             messages.append({"role": "user", "content": _user_turn(shot_schema, shot["question"])})
             messages.append({"role": "assistant", "content": shot["query"]})
 
