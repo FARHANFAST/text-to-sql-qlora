@@ -10,3 +10,7 @@ rapidfuzz==3.10.0
 python-dotenv==1.0.1
 fastapi==0.115.0
 uvicorn==0.30.6
+
+# required by tools/test-suite-sql-eval (official evaluator), not GPU-related
+nltk==3.10.3
+sqlparse==0.6.0
