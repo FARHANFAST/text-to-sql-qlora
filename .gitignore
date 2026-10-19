@@ -3,6 +3,9 @@ CLAUDE.md
 PROGRESS.md
 .claude/
 
+# cloned tools (official evaluator), not ours to version
+tools/
+
 # python
 venv/
 __pycache__/
