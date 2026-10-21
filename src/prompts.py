@@ -148,6 +148,24 @@ def build_prompt(version: str, example: dict, split: str) -> str:
     return tok.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
 
 
+def build_training_example(version: str, example: dict, split: str, target_sql: str) -> dict:
+    """Prompt text and full (prompt + target) text for one training example.
+
+    `prompt_text` is an exact prefix of `full_text` (both end the same way up through
+    "<|im_start|>assistant\\n"), so Step 7 can tokenize both, take their token-count
+    difference, and mask that many leading tokens out of the loss — training on the SQL
+    tokens only, not the prompt.
+    """
+    messages = build_messages(version, example, split)
+    tok = get_tokenizer()
+    prompt_text = tok.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
+    full_text = tok.apply_chat_template(
+        messages + [{"role": "assistant", "content": target_sql}], tokenize=False, add_generation_prompt=False
+    )
+    assert full_text.startswith(prompt_text), "chat template broke the prompt/target prefix invariant"
+    return {"prompt_text": prompt_text, "full_text": full_text}
+
+
 def token_count(text: str) -> int:
     return len(get_tokenizer()(text)["input_ids"])
 
