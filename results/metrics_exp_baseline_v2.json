@@ -1,0 +1,42 @@
+{
+  "tag": "exp_baseline_v2",
+  "split": "dev",
+  "n_examples": 1034,
+  "ex_custom": 0.6170212765957447,
+  "ex_official": 0.643,
+  "ex_official_95ci": [
+    0.6141199226305609,
+    0.6740812379110251
+  ],
+  "per_difficulty_custom": {
+    "easy": 0.8225806451612904,
+    "medium": 0.6278026905829597,
+    "hard": 0.4885057471264368,
+    "extra": 0.41566265060240964
+  },
+  "per_difficulty_official": {
+    "easy": 0.827,
+    "medium": 0.677,
+    "hard": 0.5,
+    "extra": 0.428
+  },
+  "per_difficulty_official_exact": {
+    "easy": 0.8266129032258065,
+    "medium": 0.6771300448430493,
+    "hard": 0.5,
+    "extra": 0.42771084337349397
+  },
+  "test_suite_accuracy": 0.5502901353965184,
+  "test_suite_per_difficulty": {
+    "easy": 0.8024193548387096,
+    "medium": 0.5650224215246636,
+    "hard": 0.3850574712643678,
+    "extra": 0.3072289156626506
+  },
+  "avg_gen_time_sec_batched": 0.4257347874300163,
+  "predictions_file": "results\\predictions_exp_baseline_v2.jsonl",
+  "test_suite_95ci": [
+    0.5203094777562862,
+    0.5802949709864603
+  ]
+}

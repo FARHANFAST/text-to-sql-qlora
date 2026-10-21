@@ -141,8 +141,63 @@ def official_ex(gold_path, pred_path, split: str) -> dict:
     return run_official_eval(gold_path, pred_path, official_db_dir(split), official_table_path(split))
 
 
+def official_per_example_correct(predictions: list[str], examples: list[dict], split: str) -> list[bool]:
+    """Per-example correctness using the official evaluator's own exec-match function
+    (column-order permutation, DISTINCT removal), not our stricter Counter comparison.
+    Lets us compute a 95% CI and McNemar that actually match the official EX number,
+    instead of pairing it with a CI from our own (more conservative) evaluator."""
+    sys.path.insert(0, str(TOOLS_DIR))
+    from exec_eval import eval_exec_match
+
+    db_dir = official_db_dir(split)
+    correct = []
+    for pred_sql, ex in zip(predictions, examples):
+        db = db_dir / ex["db_id"] / f"{ex['db_id']}.sqlite"
+        ok = bool(eval_exec_match(
+            db=str(db), p_str=pred_sql, g_str=ex["query"],
+            plug_value=False, keep_distinct=False, progress_bar_for_each_datapoint=False,
+        ))
+        correct.append(ok)
+    return correct
+
+
 def official_test_suite_accuracy(gold_path, pred_path) -> dict:
     """Test-suite accuracy via the official evaluator: dev only. The test-suite database
     download only has perturbation variants for dev's 20 databases, not test's 40, so this
     can never be computed for the test split — there's nothing to point --db at."""
     return run_official_eval(gold_path, pred_path, TEST_SUITE_DB_DIR, official_table_path("dev"))
+
+
+def test_suite_match_one(db_id: str, pred_sql: str, gold_sql: str, timeout: float = 5.0) -> bool:
+    """Test-suite match for one example: same comparison rule as the official evaluator
+    (column-order permutation, DISTINCT removed, bag semantics unless gold has ORDER BY),
+    checked across every perturbed database variant for db_id.
+
+    Runs each query with our own Windows-safe timeout (threading.Timer + conn.interrupt),
+    unlike the official evaluator's `asyncio.wait_for`, which can't actually cancel a
+    blocking sqlite3 call and also pays the cost of a new event loop per query — the
+    combination is why the official evaluator is impractically slow on 1,034 examples.
+    """
+    sys.path.insert(0, str(TOOLS_DIR))
+    from exec_eval import postprocess, result_eq
+    from parse import remove_distinct
+
+    p_str, g_str = postprocess(pred_sql), postprocess(gold_sql)
+    p_str, g_str = remove_distinct(p_str), remove_distinct(g_str)
+    order_matters = "order by" in g_str.lower()
+
+    variant_dir = TEST_SUITE_DB_DIR / db_id
+    variants = sorted(variant_dir.glob("*.sqlite"))
+    if not variants:
+        raise RuntimeError(f"no test-suite database variants found for {db_id} in {variant_dir}")
+
+    for variant in variants:
+        gold_rows, gold_err = run_query(variant, g_str, timeout=timeout)
+        if gold_err:
+            raise RuntimeError(f"gold query failed on test-suite variant {variant}: {gold_err}")
+        pred_rows, pred_err = run_query(variant, p_str, timeout=timeout)
+        if pred_err is not None:
+            return False
+        if not result_eq(gold_rows, pred_rows, order_matters=order_matters):
+            return False
+    return True
