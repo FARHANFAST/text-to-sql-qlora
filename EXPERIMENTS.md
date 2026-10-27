@@ -6,7 +6,7 @@
 | 2 | Prompt v2 (+ foreign keys, sample rows) | Qwen2.5-Coder-1.5B-Instruct | v2 | no | no | 64.3% | [61.4%, 67.4%] | 82.7% | 67.7% | 50.0% | 42.8% | pending | pending | 0.43s/query (batched, T4) | pending | results/predictions_exp_baseline_v2.jsonl |
 | 3 | Prompt v3 (+ 3 few-shot examples) | Qwen2.5-Coder-1.5B-Instruct | v3 | no | no | 63.1% | [60.1%, 65.9%] | 85.5% | 66.1% | 55.7% | 28.9% | pending | pending | 0.95s/query (batched, T4) | pending | results/predictions_exp_baseline_v3.jsonl |
 | 4 | QLoRA run A (rank 16, alpha 32, 1 epoch) | Qwen2.5-Coder-1.5B-Instruct + LoRA | v2 | yes | no | 72.0% | [69.1%, 74.9%] | 86.7% | 76.0% | 60.3% | 51.2% | pending | pending | 0.43s/query (batched, T4) | pending | results/predictions_exp4_run_a.jsonl |
-| 5 | QLoRA run B | pending | pending | yes | no | pending | pending | pending | pending | pending | pending | pending | pending | pending | pending | pending |
+| 5 | QLoRA run B (rank 32, alpha 64, 1 epoch — best of 5 checkpoints: steps 63/126/189/252 + final) | Qwen2.5-Coder-1.5B-Instruct + LoRA | v2 | yes | no | pending | pending | pending | pending | pending | pending | pending | pending | pending | pending | pending |
 | 6 | Self-correction on best fine-tuned model | pending | pending | yes | yes | pending | pending | pending | pending | pending | pending | pending | pending | pending | pending | pending |
 | 7 | 70B comparison (Groq) | pending | pending | no | no | pending | pending | pending | pending | pending | pending | pending | pending | pending | pending | pending |
 | 8 | Real-world eval | pending | pending | pending | pending | pending | pending | pending | pending | pending | pending | pending | pending | pending | pending | pending |
