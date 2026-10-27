@@ -75,6 +75,26 @@ def evaluate_predictions(predictions: list[str], examples: list[dict], split: st
     return {"correct": correct, "ex": sum(correct) / len(correct), "per_difficulty": per_difficulty}
 
 
+def normalize_sql_for_exact_match(sql: str) -> str:
+    """Loose string normalization for a secondary exact-match number: lowercase, collapse
+    whitespace, drop a trailing semicolon. This is NOT the official Spider exact-match
+    (which compares parsed SQL components, e.g. treating a different column order in the
+    SELECT list as equivalent) -- it's a plain string comparison, reported only as a
+    secondary, clearly-labelled number (CLAUDE.md: headline metric is EX, never exact
+    match). Inflated by a fine-tuned model's tendency to imitate gold SQL formatting
+    (spacing, keyword case) more closely than a zero-shot base model would."""
+    s = sql.strip().rstrip(";").strip()
+    s = re.sub(r"\s+", " ", s)
+    return s.lower()
+
+
+def exact_match_rate(predictions: list[str], golds: list[str]) -> float:
+    assert len(predictions) == len(golds)
+    matches = sum(normalize_sql_for_exact_match(p) == normalize_sql_for_exact_match(g)
+                  for p, g in zip(predictions, golds))
+    return matches / len(predictions)
+
+
 def bootstrap_ci(correct: list[bool], n_resamples: int = 1000, ci: float = 0.95, seed: int = 0) -> tuple[float, float, float]:
     """95% bootstrap confidence interval for EX: resample the per-example correctness
     list with replacement n_resamples times, take the mean each time, and report the

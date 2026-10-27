@@ -1,0 +1,42 @@
+{
+  "tag": "exp4_run_a",
+  "split": "dev",
+  "n_examples": 1034,
+  "ex_custom": 0.6827852998065764,
+  "ex_official": 0.72,
+  "ex_official_95ci": [
+    0.6914651837524178,
+    0.7485493230174082
+  ],
+  "per_difficulty_custom": {
+    "easy": 0.842741935483871,
+    "medium": 0.695067264573991,
+    "hard": 0.5862068965517241,
+    "extra": 0.5120481927710844
+  },
+  "per_difficulty_official": {
+    "easy": 0.867,
+    "medium": 0.76,
+    "hard": 0.603,
+    "extra": 0.512
+  },
+  "per_difficulty_official_exact": {
+    "easy": 0.8669354838709677,
+    "medium": 0.7600896860986547,
+    "hard": 0.603448275862069,
+    "extra": 0.5120481927710844
+  },
+  "test_suite_accuracy": 0.648936170212766,
+  "test_suite_per_difficulty": {
+    "easy": 0.8629032258064516,
+    "medium": 0.6748878923766816,
+    "hard": 0.5287356321839081,
+    "extra": 0.3855421686746988
+  },
+  "avg_gen_time_sec_batched": 0.4252356002593639,
+  "predictions_file": "results\\predictions_exp4_run_a.jsonl",
+  "test_suite_95ci": [
+    0.6189555125725339,
+    0.6779497098646035
+  ]
+}

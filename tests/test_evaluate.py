@@ -2,7 +2,7 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
-from evaluate import bootstrap_ci, compare, result_sets_match, strip_sql_fences
+from evaluate import bootstrap_ci, compare, exact_match_rate, result_sets_match, strip_sql_fences
 from execute import run_query
 
 SAMPLE_DB = Path(__file__).resolve().parent / "fixtures" / "sample.sqlite"
@@ -74,3 +74,15 @@ def test_compare_mcnemar_detects_clear_difference():
     assert result["b"] == 20
     assert result["c"] == 0
     assert result["p_value"] < 0.05
+
+
+def test_exact_match_rate_ignores_case_and_whitespace():
+    preds = ["select  Name   from singer;", "SELECT count(*) FROM singer"]
+    golds = ["SELECT name FROM singer", "select count(*) from singer"]
+    assert exact_match_rate(preds, golds) == 1.0
+
+
+def test_exact_match_rate_catches_real_differences():
+    preds = ["SELECT name FROM singer WHERE age > 25", "SELECT count(*) FROM singer"]
+    golds = ["SELECT name FROM singer WHERE age > 100", "SELECT count(*) FROM singer"]
+    assert exact_match_rate(preds, golds) == 0.5
