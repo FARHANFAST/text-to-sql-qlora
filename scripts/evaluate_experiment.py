@@ -88,9 +88,11 @@ def main():
         print(f"WARNING: per-example official EX ({official_mean:.4f}) and aggregate official "
               f"EX ({official_agg['all']:.4f}) disagree on {args.tag} — the two call paths diverged.")
 
-    # Test-suite accuracy is computed separately (scripts/test_suite_eval.py) — it's only
-    # required for final configurations (best baseline, best fine-tuned, final pipeline),
-    # not for every prompt-experiment iteration. See PROGRESS.md "Decisions".
+    # Test-suite accuracy is computed separately (scripts/test_suite_eval.py), and only for
+    # dev: the test-suite database download only has perturbation variants for dev's 20
+    # databases, not test's 40 (see evaluate.py's official_test_suite_accuracy), so for the
+    # test split it's never going to exist, not just not-yet-run.
+    test_suite_status = "not applicable (test split has no perturbation databases)" if args.split == "test" else "pending"
     metrics = {
         "tag": args.tag, "split": args.split, "n_examples": len(examples),
         "ex_custom": result["ex"], "ex_official": official_agg["all"],
@@ -98,8 +100,8 @@ def main():
         "per_difficulty_custom": result["per_difficulty"],
         "per_difficulty_official": {k: official_agg[k] for k in ("easy", "medium", "hard", "extra")},
         "per_difficulty_official_exact": per_difficulty_official_exact,
-        "test_suite_accuracy": "pending",
-        "test_suite_per_difficulty": "pending",
+        "test_suite_accuracy": test_suite_status,
+        "test_suite_per_difficulty": test_suite_status,
         "avg_gen_time_sec_batched": sum(gen_times) / len(gen_times),
         "predictions_file": str(combined_path.relative_to(ROOT)),
     }

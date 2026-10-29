@@ -195,3 +195,23 @@ if __name__ == "__main__":
         lengths.sort()
         mid = lengths[len(lengths) // 2]
         print(f"{version}: wrote {path} | min={lengths[0]} median={mid} max={lengths[-1]}")
+
+    # Test prompts (v2 only -- the chosen prompt version): built now so the upload is ready,
+    # but the test set itself gets run exactly once per final model, per CLAUDE.md's
+    # dev-vs-test rule. Gold SQL stays in this file (kept local, stripped before upload by
+    # scripts/prepare_kaggle_prompts.py), same pattern as the dev prompt files.
+    test = load_split("test")
+    lengths = []
+    path = out_dir / "prompts_v2_test.jsonl"
+    with open(path, "w", encoding="utf-8") as f:
+        for ex in test:
+            text = build_prompt("v2", ex, "test")
+            n = token_count(text)
+            lengths.append(n)
+            f.write(json.dumps({
+                "db_id": ex["db_id"], "question": ex["question"], "gold_sql": ex["query"],
+                "prompt": text, "tokens": n,
+            }) + "\n")
+    lengths.sort()
+    mid = lengths[len(lengths) // 2]
+    print(f"v2 (test): wrote {path} | min={lengths[0]} median={mid} max={lengths[-1]}")
