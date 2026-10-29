@@ -1,0 +1,42 @@
+{
+  "tag": "exp5_run_b_final",
+  "split": "dev",
+  "n_examples": 1034,
+  "ex_custom": 0.6818181818181818,
+  "ex_official": 0.72,
+  "ex_official_95ci": [
+    0.688588007736944,
+    0.746615087040619
+  ],
+  "per_difficulty_custom": {
+    "easy": 0.8387096774193549,
+    "medium": 0.7040358744394619,
+    "hard": 0.5804597701149425,
+    "extra": 0.4939759036144578
+  },
+  "per_difficulty_official": {
+    "easy": 0.875,
+    "medium": 0.767,
+    "hard": 0.586,
+    "extra": 0.5
+  },
+  "per_difficulty_official_exact": {
+    "easy": 0.875,
+    "medium": 0.7668161434977578,
+    "hard": 0.5862068965517241,
+    "extra": 0.5
+  },
+  "test_suite_accuracy": 0.6508704061895552,
+  "test_suite_per_difficulty": {
+    "easy": 0.8709677419354839,
+    "medium": 0.6816143497757847,
+    "hard": 0.5057471264367817,
+    "extra": 0.39156626506024095
+  },
+  "avg_gen_time_sec_batched": 0.44985935213026285,
+  "predictions_file": "results\\predictions_exp5_run_b_final.jsonl",
+  "test_suite_95ci": [
+    0.6198984526112186,
+    0.6798839458413927
+  ]
+}

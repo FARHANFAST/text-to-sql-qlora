@@ -1,0 +1,42 @@
+{
+  "tag": "exp5_run_b_step63",
+  "split": "dev",
+  "n_examples": 1034,
+  "ex_custom": 0.660541586073501,
+  "ex_official": 0.688,
+  "ex_official_95ci": [
+    0.6576402321083172,
+    0.7166344294003868
+  ],
+  "per_difficulty_custom": {
+    "easy": 0.8508064516129032,
+    "medium": 0.6591928251121076,
+    "hard": 0.6091954022988506,
+    "extra": 0.43373493975903615
+  },
+  "per_difficulty_official": {
+    "easy": 0.867,
+    "medium": 0.709,
+    "hard": 0.609,
+    "extra": 0.446
+  },
+  "per_difficulty_official_exact": {
+    "easy": 0.8669354838709677,
+    "medium": 0.7085201793721974,
+    "hard": 0.6091954022988506,
+    "extra": 0.4457831325301205
+  },
+  "test_suite_accuracy": 0.6228239845261122,
+  "test_suite_per_difficulty": {
+    "easy": 0.8629032258064516,
+    "medium": 0.6278026905829597,
+    "hard": 0.5172413793103449,
+    "extra": 0.3614457831325301
+  },
+  "avg_gen_time_sec_batched": 0.4247014409568832,
+  "predictions_file": "results\\predictions_exp5_run_b_step63.jsonl",
+  "test_suite_95ci": [
+    0.5938104448742747,
+    0.6528046421663443
+  ]
+}
