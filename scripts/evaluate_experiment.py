@@ -76,17 +76,35 @@ def main():
 
     gold_path = ROOT / "data" / "raw" / "spider" / "spider_data" / f"{args.split}_gold.sql"
     pred_sql_path = RESULTS_DIR / f"_tmp_{args.tag}.sql"
+    # The official CLI evaluator expects exactly one SQL string per line, paired by line
+    # number with the gold file. A prediction containing an embedded newline (the model
+    # occasionally formats SQL across multiple lines) would inject extra lines here and
+    # desync every gold/pred pair after it, silently corrupting the aggregate EX number.
+    # Collapse embedded newlines to a space first -- SQL is whitespace-insensitive, so this
+    # can't change what the query means.
+    one_line_sqls = [" ".join(sql.split()) for sql in cleaned_sqls]
     with open(pred_sql_path, "w", encoding="utf-8") as f:
-        f.write("\n".join(cleaned_sqls) + "\n")
+        f.write("\n".join(one_line_sqls) + "\n")
     official_agg = official_ex(gold_path, pred_sql_path, args.split)
     pred_sql_path.unlink()
 
-    # Cross-check: per-example official correctness (eval_exec_match called directly) must
-    # match the aggregate CLI call (evaluation.py), since both wrap the same underlying
-    # comparison. The CLI only prints 3 decimal places, so allow for that rounding.
+    # The headline ex_official comes from the direct per-example eval_exec_match calls
+    # (official_mean / per_difficulty_official_exact above), NOT from this CLI aggregate call.
+    # Reason: the vendored evaluation.py's evaluate() does `p_str.replace("value", "1")` on
+    # every prediction unconditionally (line ~569), a leftover from its value-plugging mode
+    # that corrupts any prediction containing the literal substring "value" even when
+    # plug_value=False. Confirmed on the Spider test run (2026-11-07/08): this flips 10 of
+    # Run A final's predictions on the boxes/warehouses database (column literally named
+    # "value") from correct to incorrect. See PROGRESS.md and docs/test_suite_sql_eval_value_bug.md
+    # for the full writeup and a draft upstream issue. The CLI aggregate is still computed and
+    # kept below for transparency/cross-checking, just not used as the headline number.
     if abs(official_mean - official_agg["all"]) > 5e-4:
-        print(f"WARNING: per-example official EX ({official_mean:.4f}) and aggregate official "
-              f"EX ({official_agg['all']:.4f}) disagree on {args.tag} — the two call paths diverged.")
+        print(f"NOTE: per-example official EX ({official_mean:.4f}) and the CLI aggregate official "
+              f"EX ({official_agg['all']:.4f}) disagree on {args.tag}. This is the known "
+              f"evaluation.py 'value'->'1' replacement bug (see PROGRESS.md) if any prediction "
+              f"contains the literal substring 'value'; the per-example number is used as the "
+              f"headline here. If this disagreement shows up somewhere without that substring "
+              f"present, treat it as a new bug and investigate before trusting either number.")
 
     # Test-suite accuracy is computed separately (scripts/test_suite_eval.py), and only for
     # dev: the test-suite database download only has perturbation variants for dev's 20
@@ -95,11 +113,12 @@ def main():
     test_suite_status = "not applicable (test split has no perturbation databases)" if args.split == "test" else "pending"
     metrics = {
         "tag": args.tag, "split": args.split, "n_examples": len(examples),
-        "ex_custom": result["ex"], "ex_official": official_agg["all"],
+        "ex_custom": result["ex"], "ex_official": official_mean,
         "ex_official_95ci": [official_lo, official_hi],
         "per_difficulty_custom": result["per_difficulty"],
-        "per_difficulty_official": {k: official_agg[k] for k in ("easy", "medium", "hard", "extra")},
-        "per_difficulty_official_exact": per_difficulty_official_exact,
+        "per_difficulty_official": per_difficulty_official_exact,
+        "ex_official_cli_aggregate": official_agg["all"],
+        "per_difficulty_official_cli_aggregate": {k: official_agg[k] for k in ("easy", "medium", "hard", "extra")},
         "test_suite_accuracy": test_suite_status,
         "test_suite_per_difficulty": test_suite_status,
         "avg_gen_time_sec_batched": sum(gen_times) / len(gen_times),
@@ -111,7 +130,7 @@ def main():
 
     print(json.dumps(metrics, indent=2))
     print(f"note: custom evaluator EX ({result['ex']:.4f}) is stricter than the official evaluator "
-          f"({official_agg['all']:.4f}) — the official evaluator allows column-order permutation and "
+          f"({official_mean:.4f}) — the official evaluator allows column-order permutation and "
           f"ignores DISTINCT mismatches by default; our quick evaluator does not. This is expected, "
           f"not a bug (see PROGRESS.md).")
 
