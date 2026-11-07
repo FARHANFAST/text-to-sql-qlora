@@ -1,0 +1,34 @@
+{
+  "tag": "final_base_v2_test",
+  "split": "test",
+  "n_examples": 2147,
+  "ex_custom": 0.6022356776897997,
+  "ex_official": 0.6436888681881695,
+  "ex_official_95ci": [
+    0.623660922217047,
+    0.6632510479739171
+  ],
+  "per_difficulty_custom": {
+    "easy": 0.825531914893617,
+    "medium": 0.6137689614935823,
+    "hard": 0.5140388768898488,
+    "extra": 0.3949579831932773
+  },
+  "per_difficulty_official": {
+    "easy": 0.8340425531914893,
+    "medium": 0.6884480746791132,
+    "hard": 0.5334773218142549,
+    "extra": 0.42857142857142855
+  },
+  "ex_official_cli_aggregate": 0.644,
+  "per_difficulty_official_cli_aggregate": {
+    "easy": 0.834,
+    "medium": 0.688,
+    "hard": 0.533,
+    "extra": 0.429
+  },
+  "test_suite_accuracy": "not applicable (test split has no perturbation databases)",
+  "test_suite_per_difficulty": "not applicable (test split has no perturbation databases)",
+  "avg_gen_time_sec_batched": 0.4177195693816926,
+  "predictions_file": "results\\predictions_final_base_v2_test.jsonl"
+}
