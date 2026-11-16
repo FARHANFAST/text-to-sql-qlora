@@ -24,5 +24,5 @@ if __name__ == "__main__":
     for version in ("v1", "v2", "v3"):
         _strip_gold(SRC_DIR / f"prompts_{version}_dev.jsonl", OUT_DIR / f"prompts_{version}_dev.jsonl")
     # test: v2 only (the chosen prompt version) -- built once, not run until the final
-    # fine-tuned model is picked (CLAUDE.md's dev-vs-test rule).
+    # fine-tuned model is picked (see README.md's dev-vs-test rule).
     _strip_gold(SRC_DIR / "prompts_v2_test.jsonl", OUT_DIR / "prompts_v2_test.jsonl")
