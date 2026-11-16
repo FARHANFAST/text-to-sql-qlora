@@ -95,13 +95,13 @@ def main():
     # that corrupts any prediction containing the literal substring "value" even when
     # plug_value=False. Confirmed on the Spider test run (2026-11-07/08): this flips 10 of
     # Run A final's predictions on the boxes/warehouses database (column literally named
-    # "value") from correct to incorrect. See PROGRESS.md and docs/test_suite_sql_eval_value_bug.md
+    # "value") from correct to incorrect. See EXPERIMENTS.md and docs/test_suite_sql_eval_value_bug.md
     # for the full writeup and a draft upstream issue. The CLI aggregate is still computed and
     # kept below for transparency/cross-checking, just not used as the headline number.
     if abs(official_mean - official_agg["all"]) > 5e-4:
         print(f"NOTE: per-example official EX ({official_mean:.4f}) and the CLI aggregate official "
               f"EX ({official_agg['all']:.4f}) disagree on {args.tag}. This is the known "
-              f"evaluation.py 'value'->'1' replacement bug (see PROGRESS.md) if any prediction "
+              f"evaluation.py 'value'->'1' replacement bug (see EXPERIMENTS.md) if any prediction "
               f"contains the literal substring 'value'; the per-example number is used as the "
               f"headline here. If this disagreement shows up somewhere without that substring "
               f"present, treat it as a new bug and investigate before trusting either number.")
@@ -132,7 +132,7 @@ def main():
     print(f"note: custom evaluator EX ({result['ex']:.4f}) is stricter than the official evaluator "
           f"({official_mean:.4f}) — the official evaluator allows column-order permutation and "
           f"ignores DISTINCT mismatches by default; our quick evaluator does not. This is expected, "
-          f"not a bug (see PROGRESS.md).")
+          f"not a bug (see EXPERIMENTS.md).")
 
 
 if __name__ == "__main__":

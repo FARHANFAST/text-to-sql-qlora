@@ -21,6 +21,11 @@ data/processed/
 *.safetensors
 adapters/
 
+# evaluate_experiment.py output from a one-off "--tag check_*" verification run
+# (e.g. the README's reproduce command) -- not a logged experiment, never commit it
+results/predictions_check_*.jsonl
+results/metrics_check_*.json
+
 # env / secrets
 .env
 
