@@ -7,7 +7,7 @@
 | 3 | Prompt v3 (+ 3 few-shot examples) | Qwen2.5-Coder-1.5B-Instruct | v3 | no | no | 63.1% | [60.1%, 65.9%] | 85.5% | 66.1% | 55.7% | 28.9% | pending | pending | 0.95s/query (batched, T4) | pending | results/predictions_exp_baseline_v3.jsonl |
 | 4 | QLoRA run A (rank 16, alpha 32, 1 epoch) | Qwen2.5-Coder-1.5B-Instruct + LoRA | v2 | yes | no | 72.0% | [69.1%, 74.9%] | 86.7% | 76.0% | 60.3% | 51.2% | 73.9% [72.0%, 75.6%] | pending | 0.43s/query (batched, T4) | pending | results/predictions_exp4_run_a.jsonl |
 | 5 | QLoRA run B (rank 32, alpha 64, 1 epoch — best of 4 evaluated checkpoints: steps 63/126/189 + final) | Qwen2.5-Coder-1.5B-Instruct + LoRA | v2 | yes | no | 72.0% | [68.9%, 74.7%] | 87.5% | 76.7% | 58.6% | 50.0% | pending | pending | 0.45s/query (batched, T4) | pending | results/predictions_exp5_run_b_final.jsonl |
-| 6 | Self-correction on best fine-tuned model | pending | pending | yes | yes | pending | pending | pending | pending | pending | pending | pending | pending | pending | pending | pending |
+| 6 | Run A with self-correction: retry on SQL error with the error text fed back, max 2 retries | Qwen2.5-Coder-1.5B-Instruct + LoRA | v2 | yes | yes | 74.2% | [71.5%, 76.7%] | 88.3% | 77.8% | 63.8% | 54.2% | pending | pending | about +0.13s/query over 0.43s (batched, T4) | pending | results/predictions_exp6_error_retry.jsonl |
 | 7 | 70B comparison (Groq) | pending | pending | no | no | pending | pending | pending | pending | pending | pending | pending | pending | pending | pending | pending |
 | 8 | Real-world eval | pending | pending | pending | pending | pending | pending | pending | pending | pending | pending | pending | pending | pending | pending | pending |
 | 9a | Real-world: schema descriptions | pending | pending | pending | pending | pending | pending | pending | pending | pending | pending | pending | pending | pending | pending | pending |
@@ -54,6 +54,26 @@ Notes on Exp 5 (QLoRA run B):
 - McNemar, best Run B checkpoint (final, tied with Run A on official EX) vs Run A final: fixed 35 / broke 35, p=0.905 — not a real difference, these two models behave the same on dev. Doubling LoRA rank (16→32) did not produce a significantly better model here.
 - Run B final and Run A final produce the exact same normalized SQL (lowercase, whitespace-collapsed) on 812/1,034 questions — confirms the ~813/1,034 you found from a quick text comparison. The two models agree almost as often as either agrees with itself across a hyperparameter change this small.
 - **Recommendation: Run A (rank 16) is the final model for the one-time Spider test run**, not Run B. No Run B checkpoint is significantly better than Run A (the best one, final, is statistically indistinguishable: p=0.905), and step 126 shows doubling the rank can make the model measurably *worse* partway through training, not just "no better." With accuracy tied, the smaller adapter (half the LoRA parameters) wins — nothing is gained from the extra capacity here, and a smaller adapter is simpler to explain, ship, and serve. Tuning stops here, per the plan: Run A final (`FARHANFAST/text2sql-qlora-run-a/final_adapter`) goes forward to the Spider test run, alongside the plain v2 base model for a fair before/after.
+
+Notes on Exp 6 (self-correction, dev):
+- The loop runs the query on SQLite. If it errors, I append the failed SQL and the error message as a follow-up chat turn and generate again, up to 2 retries. It never sees gold SQL. The answer is the latest attempt that ran without an error.
+- The first attempt matches the Exp 4 predictions on 1,034 of 1,034 questions, so Exp 4 (72.0%) is the no-retry baseline.
+- Same run, same first attempts, official per-example match:
+
+| Variant | EX (dev) | 95% CI | Fixed / broke vs no retry | McNemar p | Questions retried | Avg attempts |
+|---|---|---|---|---|---|---|
+| No retry | 72.0% | [69.1%, 74.9%] | | | 0 | 1.000 |
+| Plain retry (only "not right") | 72.6% | [69.9%, 75.3%] | 7 / 0 | 0.016 | 117 | 1.217 |
+| Error retry | 74.2% | [71.5%, 76.7%] | 23 / 0 | 2.4e-07 | 117 | 1.184 |
+| Plain + empty-result retry | 72.7% | [69.9%, 75.4%] | 8 / 0 | 0.0078 | 184 | 1.345 |
+| Error + empty-result retry | 74.1% | [71.5%, 76.6%] | 25 / 3 | 7.2e-05 | 184 | 1.312 |
+
+- Error retry vs plain retry, directly: error right and plain wrong on 18 questions, the reverse on 2, p = 4.0e-04. The error message is what helps, not just a second try.
+- Test-suite accuracy for error retry on dev: 66.9%, 95% CI [64.0%, 69.7%] (Run A without retry: 64.9%).
+- Of the 117 failing queries, 102 were "no such column", 7 "no such table", 8 other, 0 syntax. Error retry fixed 20, 2 and 1 of them. 70 queries still error after two retries.
+- Retrying empty results did not help: of 67 empty results, 2 became correct and 3 correct answers were lost. 38 of the 67 empty results were correct to begin with.
+- Time: the first attempt takes 0.46s per question (batched, T4). Error retry adds 0.13s per question on average, about 1s per retried question.
+- Summary: results/self_correction_summary.json. Before/after examples: results/self_correction_examples.md. Raw notebook outputs: results/step9/.
 
 Notes on the Spider test run (final headline numbers, Exp 2 and Exp 4's `EX (test)` cells):
 - Run once each, per the dev-vs-test rule: the plain v2 base model (tag `base_v2_test`) and Run A's `final_adapter` (tag `run_a_final_test`), same Kaggle session, same decoding, all 2,147 test questions. 2,147/2,147 outputs cleaned into SQL for both, 0 cleaning failures, 0 empty outputs.

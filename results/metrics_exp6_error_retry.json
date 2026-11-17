@@ -1,0 +1,43 @@
+{
+  "tag": "exp6_error_retry",
+  "split": "dev",
+  "n_examples": 1034,
+  "ex_custom": 0.7021276595744681,
+  "ex_official": 0.741779497098646,
+  "ex_official_95ci": [
+    0.7147001934235977,
+    0.7669487427466151
+  ],
+  "per_difficulty_custom": {
+    "easy": 0.8548387096774194,
+    "medium": 0.7130044843049327,
+    "hard": 0.6206896551724138,
+    "extra": 0.5301204819277109
+  },
+  "per_difficulty_official": {
+    "easy": 0.8830645161290323,
+    "medium": 0.7780269058295964,
+    "hard": 0.6379310344827587,
+    "extra": 0.5421686746987951
+  },
+  "ex_official_cli_aggregate": 0.742,
+  "per_difficulty_official_cli_aggregate": {
+    "easy": 0.883,
+    "medium": 0.778,
+    "hard": 0.638,
+    "extra": 0.542
+  },
+  "test_suite_accuracy": 0.6692456479690522,
+  "test_suite_per_difficulty": {
+    "easy": 0.875,
+    "medium": 0.6928251121076233,
+    "hard": 0.5574712643678161,
+    "extra": 0.41566265060240964
+  },
+  "avg_gen_time_sec_batched": 0.5697136453318644,
+  "predictions_file": "results\\predictions_exp6_error_retry.jsonl",
+  "test_suite_95ci": [
+    0.6402321083172147,
+    0.6972920696324951
+  ]
+}

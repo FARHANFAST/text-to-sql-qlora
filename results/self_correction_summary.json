@@ -1,0 +1,233 @@
+{
+  "split": "dev",
+  "n_examples": 1034,
+  "attempt1_identical_to_exp4": {
+    "same": 1034,
+    "n": 1034,
+    "rate": 1.0
+  },
+  "no_retry": {
+    "ex_official": 0.7195357833655706,
+    "ex_official_95ci": [
+      0.6914651837524178,
+      0.7485493230174082
+    ],
+    "per_difficulty_official": {
+      "easy": 0.8669354838709677,
+      "medium": 0.7600896860986547,
+      "hard": 0.603448275862069,
+      "extra": 0.5120481927710844
+    },
+    "avg_gen_time_sec_batched": 0.4608920974012038
+  },
+  "plain": {
+    "ex_official": 0.7263056092843327,
+    "ex_official_95ci": [
+      0.6992263056092843,
+      0.753384912959381
+    ],
+    "per_difficulty_official": {
+      "easy": 0.8709677419354839,
+      "medium": 0.773542600896861,
+      "hard": 0.603448275862069,
+      "extra": 0.5120481927710844
+    },
+    "mcnemar_vs_no_retry": {
+      "fixed": 7,
+      "broken": 0,
+      "p_value": 0.015625
+    },
+    "n_retried": 117,
+    "n_retried_twice": 107,
+    "avg_attempts": 1.2166344294003868,
+    "retry_gen_time_sec_total": 139.8718585968018,
+    "exec_time_sec_total": 20.507490158081055,
+    "extra_time_sec_per_question": 0.15510575314785574,
+    "extra_time_sec_per_retried_question": 1.1954859709128358,
+    "avg_gen_time_sec_batched": 0.5961646879203553,
+    "by_trigger": {
+      "wrong column": {
+        "retried": 102,
+        "runs_after_retry": 9,
+        "changed_final_sql": 102,
+        "fixed": 6,
+        "broken": 0
+      },
+      "other": {
+        "retried": 8,
+        "runs_after_retry": 2,
+        "changed_final_sql": 8,
+        "fixed": 0,
+        "broken": 0
+      },
+      "wrong table": {
+        "retried": 7,
+        "runs_after_retry": 1,
+        "changed_final_sql": 7,
+        "fixed": 1,
+        "broken": 0
+      }
+    }
+  },
+  "error": {
+    "ex_official": 0.741779497098646,
+    "ex_official_95ci": [
+      0.7147001934235977,
+      0.7669487427466151
+    ],
+    "per_difficulty_official": {
+      "easy": 0.8830645161290323,
+      "medium": 0.7780269058295964,
+      "hard": 0.6379310344827587,
+      "extra": 0.5421686746987951
+    },
+    "mcnemar_vs_no_retry": {
+      "fixed": 23,
+      "broken": 0,
+      "p_value": 2.384185791015625e-07
+    },
+    "n_retried": 117,
+    "n_retried_twice": 73,
+    "avg_attempts": 1.183752417794971,
+    "retry_gen_time_sec_total": 112.52148056030278,
+    "exec_time_sec_total": 20.432374477386475,
+    "extra_time_sec_per_question": 0.1285820648333552,
+    "extra_time_sec_per_retried_question": 0.961722056070964,
+    "avg_gen_time_sec_batched": 0.5697136453318644,
+    "by_trigger": {
+      "wrong column": {
+        "retried": 102,
+        "runs_after_retry": 37,
+        "changed_final_sql": 102,
+        "fixed": 20,
+        "broken": 0
+      },
+      "other": {
+        "retried": 8,
+        "runs_after_retry": 7,
+        "changed_final_sql": 8,
+        "fixed": 1,
+        "broken": 0
+      },
+      "wrong table": {
+        "retried": 7,
+        "runs_after_retry": 3,
+        "changed_final_sql": 7,
+        "fixed": 2,
+        "broken": 0
+      }
+    }
+  },
+  "plain_empty": {
+    "ex_official": 0.7272727272727273,
+    "ex_official_95ci": [
+      0.6992263056092843,
+      0.7543520309477756
+    ],
+    "per_difficulty_official": {
+      "easy": 0.8709677419354839,
+      "medium": 0.7757847533632287,
+      "hard": 0.603448275862069,
+      "extra": 0.5120481927710844
+    },
+    "mcnemar_vs_no_retry": {
+      "fixed": 8,
+      "broken": 0,
+      "p_value": 0.0078125
+    },
+    "n_retried": 184,
+    "n_retried_twice": 173,
+    "avg_attempts": 1.3452611218568666,
+    "retry_gen_time_sec_total": 207.8692617416382,
+    "exec_time_sec_total": 20.829004526138306,
+    "extra_time_sec_per_question": 0.221178207222221,
+    "extra_time_sec_per_retried_question": 1.1297242485958598,
+    "avg_gen_time_sec_batched": 0.6619261996658451,
+    "by_trigger": {
+      "wrong column": {
+        "retried": 102,
+        "runs_after_retry": 9,
+        "changed_final_sql": 102,
+        "fixed": 6,
+        "broken": 0
+      },
+      "empty result": {
+        "retried": 67,
+        "runs_after_retry": 67,
+        "changed_final_sql": 65,
+        "fixed": 1,
+        "broken": 0
+      },
+      "other": {
+        "retried": 8,
+        "runs_after_retry": 2,
+        "changed_final_sql": 8,
+        "fixed": 0,
+        "broken": 0
+      },
+      "wrong table": {
+        "retried": 7,
+        "runs_after_retry": 1,
+        "changed_final_sql": 7,
+        "fixed": 1,
+        "broken": 0
+      }
+    }
+  },
+  "error_empty": {
+    "ex_official": 0.7408123791102514,
+    "ex_official_95ci": [
+      0.7146760154738878,
+      0.7659816247582205
+    ],
+    "per_difficulty_official": {
+      "easy": 0.8870967741935484,
+      "medium": 0.773542600896861,
+      "hard": 0.6379310344827587,
+      "extra": 0.5421686746987951
+    },
+    "mcnemar_vs_no_retry": {
+      "fixed": 25,
+      "broken": 3,
+      "p_value": 7.228793882618767e-05
+    },
+    "n_retried": 184,
+    "n_retried_twice": 139,
+    "avg_attempts": 1.3123791102514506,
+    "retry_gen_time_sec_total": 194.12749767303458,
+    "exec_time_sec_total": 20.755845546722412,
+    "extra_time_sec_per_question": 0.20781754663419438,
+    "extra_time_sec_per_retried_question": 1.055040748223014,
+    "avg_gen_time_sec_batched": 0.6486362924428237,
+    "by_trigger": {
+      "wrong column": {
+        "retried": 102,
+        "runs_after_retry": 37,
+        "changed_final_sql": 102,
+        "fixed": 20,
+        "broken": 0
+      },
+      "empty result": {
+        "retried": 67,
+        "runs_after_retry": 67,
+        "changed_final_sql": 67,
+        "fixed": 2,
+        "broken": 3
+      },
+      "other": {
+        "retried": 8,
+        "runs_after_retry": 7,
+        "changed_final_sql": 8,
+        "fixed": 1,
+        "broken": 0
+      },
+      "wrong table": {
+        "retried": 7,
+        "runs_after_retry": 3,
+        "changed_final_sql": 7,
+        "fixed": 2,
+        "broken": 0
+      }
+    }
+  }
+}
