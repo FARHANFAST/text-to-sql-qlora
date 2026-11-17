@@ -19,20 +19,10 @@ from scipy import stats
 
 from data_utils import SPIDER_DIR, db_path
 from execute import run_query
+from postprocess import strip_sql_fences  # noqa: F401  (re-exported for callers)
 
 TOOLS_DIR = Path(__file__).resolve().parents[1] / "tools" / "test-suite-sql-eval"
 TEST_SUITE_DB_DIR = Path(__file__).resolve().parents[1] / "data" / "raw" / "test_suite" / "database"
-
-
-def strip_sql_fences(text: str) -> str:
-    """Strip a markdown code fence (```sql ... ``` or ``` ... ```) wrapping a model's raw output."""
-    text = text.strip()
-    fence = re.match(r"^```(?:sql)?\s*(.*?)\s*```$", text, re.DOTALL | re.IGNORECASE)
-    if fence:
-        text = fence.group(1).strip()
-    text = re.sub(r"^```(?:sql)?\s*", "", text, flags=re.IGNORECASE)
-    text = re.sub(r"\s*```$", "", text)
-    return text.strip()
 
 
 def result_sets_match(gold_rows: list, pred_rows: list, order_matters: bool) -> bool:
