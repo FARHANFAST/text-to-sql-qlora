@@ -1,0 +1,74 @@
+{
+  "split": "test",
+  "n_examples": 2147,
+  "no_retry": {
+    "ex_official": 0.7387051700046576,
+    "ex_official_95ci": [
+      0.7195971122496506,
+      0.7559501630181649
+    ],
+    "per_difficulty_official": {
+      "easy": 0.8936170212765957,
+      "medium": 0.7724620770128354,
+      "hard": 0.67170626349892,
+      "extra": 0.5406162464985994
+    },
+    "avg_gen_time_sec_batched": 0.42834240323063605
+  },
+  "error": {
+    "ex_official": 0.7470889613414066,
+    "ex_official_95ci": [
+      0.727992547741034,
+      0.7643223102002794
+    ],
+    "per_difficulty_official": {
+      "easy": 0.8957446808510638,
+      "medium": 0.7817969661610268,
+      "hard": 0.6803455723542117,
+      "extra": 0.5546218487394958
+    },
+    "mcnemar_vs_no_retry": {
+      "fixed": 18,
+      "broken": 0,
+      "p_value": 7.62939453125e-06
+    },
+    "n_retried": 198,
+    "n_retried_twice": 151,
+    "avg_attempts": 1.1625523986958546,
+    "retry_gen_time_sec_total": 263.73885774612427,
+    "exec_time_sec_total": 25.100353479385376,
+    "extra_time_sec_per_question": 0.13453153759921269,
+    "extra_time_sec_per_retried_question": 1.3320144330612336,
+    "avg_gen_time_sec_batched": 0.5511830449381939,
+    "by_trigger": {
+      "wrong column": {
+        "retried": 175,
+        "runs_after_retry": 33,
+        "changed_final_sql": 175,
+        "fixed": 11,
+        "broken": 0
+      },
+      "wrong table": {
+        "retried": 7,
+        "runs_after_retry": 6,
+        "changed_final_sql": 7,
+        "fixed": 3,
+        "broken": 0
+      },
+      "other": {
+        "retried": 14,
+        "runs_after_retry": 10,
+        "changed_final_sql": 14,
+        "fixed": 4,
+        "broken": 0
+      },
+      "syntax": {
+        "retried": 2,
+        "runs_after_retry": 0,
+        "changed_final_sql": 2,
+        "fixed": 0,
+        "broken": 0
+      }
+    }
+  }
+}

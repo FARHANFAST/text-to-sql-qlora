@@ -1,0 +1,34 @@
+{
+  "tag": "final_exp6_error_retry_test",
+  "split": "test",
+  "n_examples": 2147,
+  "ex_custom": 0.6991150442477876,
+  "ex_official": 0.7470889613414066,
+  "ex_official_95ci": [
+    0.727992547741034,
+    0.7643223102002794
+  ],
+  "per_difficulty_custom": {
+    "easy": 0.8893617021276595,
+    "medium": 0.6989498249708285,
+    "hard": 0.6414686825053996,
+    "extra": 0.5238095238095238
+  },
+  "per_difficulty_official": {
+    "easy": 0.8957446808510638,
+    "medium": 0.7817969661610268,
+    "hard": 0.6803455723542117,
+    "extra": 0.5546218487394958
+  },
+  "ex_official_cli_aggregate": 0.742,
+  "per_difficulty_official_cli_aggregate": {
+    "easy": 0.896,
+    "medium": 0.774,
+    "hard": 0.676,
+    "extra": 0.552
+  },
+  "test_suite_accuracy": "not applicable (test split has no perturbation databases)",
+  "test_suite_per_difficulty": "not applicable (test split has no perturbation databases)",
+  "avg_gen_time_sec_batched": 0.5511830449381939,
+  "predictions_file": "results\\predictions_final_exp6_error_retry_test.jsonl"
+}
